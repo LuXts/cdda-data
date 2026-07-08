@@ -242,11 +242,18 @@ export default async function run({ github, context, dryRun = false }) {
   const existingAllBuilds = JSON.parse(existingAllBuildsJson);
   const existingImportantBuildsJson = await fetchRawFile("builds.json");
 
+  const CUTOFF_DATE = new Date("2026-07-08T00:00:00Z");
+
   const newBuilds = [];
 
-  const missingReleases = releases.filter(
+  const allMissingReleases = releases.filter(
     (r) => !existingAllBuilds.some((b) => b.build_number === r.tag_name),
   );
+
+  const missingReleases = allMissingReleases.filter((r) => {
+    const created = new Date(r.created_at);
+    return created >= CUTOFF_DATE;
+  });
 
   const backfillBuilds = existingAllBuilds
     .filter(
