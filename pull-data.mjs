@@ -131,9 +131,7 @@ export default async function run({ github, context, dryRun = false }) {
     repo: "Cataclysm-Cleanwater-Bomb",
   });
 
-  const latestRelease = releases.find((r) =>
-    r.tag_name.startsWith("cdda-experimental-"),
-  )?.tag_name;
+  const latestRelease = releases[0]?.tag_name;
 
   console.log(`Latest experimental: ${latestRelease}`);
 
@@ -207,8 +205,9 @@ export default async function run({ github, context, dryRun = false }) {
     const cutoff = new Date();
     cutoff.setUTCMonth(cutoff.getUTCMonth() - 3);
     return builds.filter((build) => {
-      const isExperimental = build.build_number.startsWith("cdda-experimental-");
-      const isStableRelease = !isExperimental && !build.prerelease;
+      // 以数字+点号开头的是稳定版（如 0.G, 0.H），其余按实验版处理
+      const isStableRelease = build.prerelease !== true && /^\d/.test(build.build_number);
+      const isExperimental = !isStableRelease;
       if (isStableRelease) return true;
       const createdAt = new Date(build.created_at);
       if (Number.isNaN(createdAt.valueOf())) return false;
