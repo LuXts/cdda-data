@@ -127,7 +127,7 @@ export default async function run({ github, context, dryRun = false }) {
   console.log("Fetching release list...");
 
   const { data: releases } = await github.rest.repos.listReleases({
-    owner: "LYHGLYTX",
+    owner: "CrimsonCrossBunker",
     repo: "Cataclysm-Cleanwater-Bomb",
   });
 
@@ -276,7 +276,7 @@ export default async function run({ github, context, dryRun = false }) {
     Math.max(0, maxReleasesPerRun - releaseQueue.length),
   )) {
     const { data: release } = await github.rest.repos.getReleaseByTag({
-      owner: "LYHGLYTX",
+      owner: "CrimsonCrossBunker",
       repo: "Cataclysm-Cleanwater-Bomb",
       tag: build.build_number,
     });
@@ -284,7 +284,7 @@ export default async function run({ github, context, dryRun = false }) {
   }
 
   const translationArtifacts = await github.rest.actions.listArtifactsForRepo({
-    owner: "LYHGLYTX",
+    owner: "CrimsonCrossBunker",
     repo: "Cataclysm-Cleanwater-Bomb",
     name: "translations",
     per_page: 100,
@@ -305,7 +305,7 @@ export default async function run({ github, context, dryRun = false }) {
     console.log(`Fetching source...`);
 
     const { data: zip } = await github.rest.repos.downloadZipballArchive({
-      owner: "LYHGLYTX",
+      owner: "CrimsonCrossBunker",
       repo: "Cataclysm-Cleanwater-Bomb",
       ref: tag_name,
     });
@@ -421,7 +421,7 @@ export default async function run({ github, context, dryRun = false }) {
       console.log("Found translations artifact")
 
       const { data: zip } = await github.rest.actions.downloadArtifact({
-        owner: "LYHGLYTX",
+        owner: "CrimsonCrossBunker",
         repo: "Cataclysm-Cleanwater-Bomb",
         artifact_id: relevantTranslationArtifact.id,
         archive_format: "zip"
